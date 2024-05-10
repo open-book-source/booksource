@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          番茄小说网
 // @domain        fanqienovel.com
-// @version       1.0.6
+// @version       1.0.7
 // @icon          https://p1-tt.byteimg.com/origin/novel-static/a3621391ca2e537045168afda6722ee9
 // @supportURL    https://github.com/open-source-scripts/book-scripts/issues
 // @function      categories
@@ -114,7 +114,7 @@ async function toc(id) {
 // 章节
 async function chapter(bid, cid) {
   let args = JSON.parse(cid);
-  let response = await fetch(`https://novel.snssdk.com/api/novel/book/reader/full/v1/?device_platform=android&version_code=973&app_name=news_article&version_name=9.7.3&app_version=9.7.3&device_id=1&channel=google&device_type=1&os_api=33&os_version=13&item_id=${args.id}&aid=1319`, {
+  let response = await fetch(`https://api.52loli.cc/content?item_id=${args.id}`, {
     headers: {'User-Agent': UserAgents.android},
   });
   if (response.status !== 200) {
@@ -124,10 +124,12 @@ async function chapter(bid, cid) {
   if ($.code !== 0) {
     throw new SourceError(`${$.message}(${$.code})`);
   }
+  let document = new Document($.data.content);
+  document.querySelector('h1').remove();
   return {
     data: {
       finalUrl: response.finalUrl,
-      body: new Document($.data.content).querySelector('article').outerHtml,
+      body: document.outerHtml,
     },
   };
 }
