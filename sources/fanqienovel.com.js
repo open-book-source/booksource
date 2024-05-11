@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          番茄小说网
 // @domain        fanqienovel.com
-// @version       1.0.7
+// @version       1.0.8
 // @icon          https://p1-tt.byteimg.com/origin/novel-static/a3621391ca2e537045168afda6722ee9
 // @supportURL    https://github.com/open-source-scripts/book-scripts/issues
 // @function      categories
@@ -125,7 +125,8 @@ async function chapter(bid, cid) {
     throw new SourceError(`${$.message}(${$.code})`);
   }
   let document = new Document($.data.content);
-  document.querySelector('h1').remove();
+  document = document.querySelector('article') ?? document.querySelector('body');
+  document.querySelector('h1')?.remove();
   return {
     data: {
       finalUrl: response.finalUrl,
