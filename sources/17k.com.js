@@ -2,7 +2,7 @@
 // @name          17K小说网
 // @domain        17k.com
 // @description   一起看小说
-// @version       1.0.4
+// @version       1.0.5
 // @icon          https://www.17k.com/favicon.ico
 // @supportURL    https://github.com/open-source-scripts/book-scripts/issues
 // @function      categories
@@ -14,6 +14,9 @@
 // @function      profile
 // @function      schedules
 // ==/UserScript==
+
+const appKey = '4037465544';
+const version = '78700';
 
 const _sub_date_categories = [
   {key: '周', value: 1},
@@ -65,7 +68,7 @@ async function category(categories, opaque) {
     orderTime = categories[2];
   }
   let page = opaque ? opaque.page : 1;
-  let response = await fetch(`https://api.17k.com/book/rank/client?classId=${classId}&orderTime=${orderTime}&orderBy=1&page=${page}&type=${type}&clientType=1&cpsOpid=0&_filterData=1&channel=0&_versions=1070&merchant=17Kyyb&appKey=4037465544&cpsSource=0&platform=2`, {
+  let response = await fetch(`https://api.17k.com/book/rank/client?classId=${classId}&orderTime=${orderTime}&orderBy=1&page=${page}&type=${type}&clientType=1&cpsOpid=0&_filterData=1&channel=0&_versions=${version}&merchant=17Kyyb&appKey=${appKey}&cpsSource=0&platform=2`, {
     headers: {'User-Agent': UserAgents.macos},
   });
   if (response.status !== 200) {
@@ -109,7 +112,7 @@ async function category(categories, opaque) {
 // 搜索
 async function search(keyword, opaque) {
   let page = opaque ? opaque.page : 1;
-  let response = await fetch(`https://api.17k.com/v2/book/search?sort_type=0&app_key=4037465544&_access_version=2&cps=0&channel=2&_versions=1070&merchant=17KH5&page=${page}&client_type=1&_filter_data=1&class=0&key=${encodeURI(keyword)}`, {
+  let response = await fetch(`https://api.17k.com/v2/book/search?sort_type=0&app_key=4037465544&_access_version=2&cps=0&channel=2&_versions=${version}&merchant=17KH5&page=${page}&client_type=1&_filter_data=1&class=0&key=${encodeURI(keyword)}`, {
     headers: {'User-Agent': UserAgents.macos},
   });
   if (response.status !== 200) {
@@ -155,7 +158,7 @@ async function search(keyword, opaque) {
 
 // 详情
 async function detail(id) {
-  let response = await fetch(`https://api.17k.com/book/${id}/split1/merge?iltc=1&cpsOpid=0&_filterData=1&device_id=&channel=0&_versions=1160&merchant=17Kyyb&platform=2&manufacturer=Xiaomi&clientType=1&appKey=4037465544&model=&cpsSource=0&brand=Redmi&youthModel=0`, {
+  let response = await fetch(`https://api.17k.com/book/${id}/split1/merge?iltc=1&cpsOpid=0&_filterData=1&device_id=&channel=0&_versions=${version}&merchant=17Kyyb&platform=2&manufacturer=Xiaomi&clientType=1&appKey=${appKey}&model=&cpsSource=0&brand=Redmi&youthModel=0`, {
     headers: {'User-Agent': UserAgents.macos},
   });
   if (response.status !== 200) {
@@ -187,7 +190,7 @@ async function detail(id) {
 
 // 目录
 async function toc(id) {
-  let response = await fetch(`https://api.17k.com/v2/book/${id}/volumes?app_key=4037465544&price_extend=1&_versions=1070&client_type=2&_filter_data=1&channel=2&merchant=17Khwyysd&_access_version=2&cps=0&book_id=${id}`, {
+  let response = await fetch(`https://api.17k.com/v2/book/${id}/volumes?app_key=4037465544&price_extend=1&_versions=${version}&client_type=2&_filter_data=1&channel=2&merchant=17Khwyysd&_access_version=2&cps=0&book_id=${id}`, {
     headers: {'User-Agent': UserAgents.macos},
   });
   if (response.status !== 200) {
@@ -221,7 +224,7 @@ async function toc(id) {
 
 // 章节
 async function chapter(bid, cid) {
-  let response = await fetch(`https://api.17k.com/v2/book/${bid}/chapter/${cid}/content?app_type=8&app_key=4037465544&_versions=979&client_type=1&_filter_data=1&channel=2&merchant=17Khwyysd&_access_version=2&cps=0`, {
+  let response = await fetch(`https://api.17k.com/v2/book/${bid}/chapter/${cid}/content?app_type=8&app_key=4037465544&_versions=${version}&client_type=1&_filter_data=1&channel=2&merchant=17Khwyysd&_access_version=2&cps=0`, {
     headers: {'User-Agent': UserAgents.macos},
   });
   if (response.status !== 200) {
@@ -276,7 +279,7 @@ async function profile() {
   if (!cookie) {
     throw new UnconfiguredError();
   }
-  let response = await fetch(`https://api.17k.com/user/mine/merge?access_token=1&accountInfo=1&bindInfo=1&benefitsType=1&cpsOpid=0&_filterData=1&device_id=&channel=0&_versions=1230&merchant=17Khwyysd&platform=2&manufacturer=Xiaomi&clientType=1&width=1080&appKey=4037465544&cpsSource=0&youthModel=0&height=2175`, {
+  let response = await fetch(`https://api.17k.com/user/mine/merge?access_token=1&accountInfo=1&bindInfo=1&benefitsType=1&cpsOpid=0&_filterData=1&device_id=&channel=0&_versions=${version}&merchant=17Khwyysd&platform=2&manufacturer=Xiaomi&clientType=1&width=1080&appKey=${appKey}&cpsSource=0&youthModel=0&height=2175`, {
     headers: {'User-Agent': UserAgents.macos, cookie: cookie},
   });
   if (response.status !== 200) {
@@ -377,7 +380,7 @@ async function scheduleLogs(action) {
 // 获取书架书籍
 async function bookshelf() {
   let cookie = await Storage.get('cookie');
-  let response = await fetch(`https://user.17k.com/ck/author/shelf?platform=4&appKey=1351550300`, {
+  let response = await fetch(`https://user.17k.com/ck/author/shelf?platform=4&appKey=${appKey}`, {
     headers: {'User-Agent': UserAgents.macos, cookie: cookie},
   });
   if (response.status !== 200) {
