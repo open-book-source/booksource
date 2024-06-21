@@ -2,7 +2,7 @@
 // @name          纵横中文网
 // @domain        zongheng.com
 // @description   上纵横小说, 看大神之作
-// @version       1.0.1
+// @version       1.0.2
 // @icon          https://www.zongheng.com/favicon.ico
 // @supportURL    https://github.com/open-source-scripts/book-scripts/issues
 // @function      categories
@@ -201,26 +201,30 @@ async function search(keyword, opaque) {
   if ($.code !== 0) {
     throw new SourceError(`${$.message}(${$.code})`);
   }
-  return {
-    data: {
-      data: $.data.datas.list.map((item) => ({
-        id: `${item.bookId}`,
-        name: new Document(item.name).text,
-        authorId: `${item.authorId}`,
-        author: new Document(item.authorName).text,
-        cover: `https://static.zongheng.com/upload${item.coverUrl}`,
-        intro: new Document(item.description).text,
-        words: item.totalWord,
-        updateTime: item.updateTime,
-        lastChapterName: item.chapterName,
-        category: item.cateFineName,
-        tags: new Document(item.keyword).text.split(' '),
-        status: item.serialStatus === 0 ? 0 : 1,
-      })),
-      hasMore: $.data.datas.pageNo < $.data.datas.totalPage,
-      opaque: {page: $.data.datas.pageNo + 1},
-    },
-  };
+  if ($.data.datas) {
+    return {
+      data: {
+        data: $.data.datas.list.map((item) => ({
+          id: `${item.bookId}`,
+          name: new Document(item.name).text,
+          authorId: `${item.authorId}`,
+          author: new Document(item.authorName).text,
+          cover: `https://static.zongheng.com/upload${item.coverUrl}`,
+          intro: new Document(item.description).text,
+          words: item.totalWord,
+          updateTime: item.updateTime,
+          lastChapterName: item.chapterName,
+          category: item.cateFineName,
+          tags: new Document(item.keyword).text.split(' '),
+          status: item.serialStatus === 0 ? 0 : 1,
+        })),
+        hasMore: $.data.datas.pageNo < $.data.datas.totalPage,
+        opaque: {page: $.data.datas.pageNo + 1},
+      },
+    };
+  } else {
+    return {data: {data: [], hasMore: false}};
+  }
 }
 
 async function toc(id) {
