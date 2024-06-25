@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          番茄小说网
 // @domain        fanqienovel.com
-// @version       1.0.8
+// @version       1.0.9
 // @icon          https://p1-tt.byteimg.com/origin/novel-static/a3621391ca2e537045168afda6722ee9
 // @supportURL    https://github.com/open-source-scripts/book-scripts/issues
 // @function      categories
@@ -114,23 +114,16 @@ async function toc(id) {
 // 章节
 async function chapter(bid, cid) {
   let args = JSON.parse(cid);
-  let response = await fetch(`https://api.52loli.cc/content?item_id=${args.id}`, {
+  let response = await fetch(`https://fqnovel.pages.dev/content?item_id=${args.id}`, {
     headers: {'User-Agent': UserAgents.android},
   });
   if (response.status !== 200) {
     throw new NetworkError(response.status);
   }
-  let $ = JSON.parse(response.data);
-  if ($.code !== 0) {
-    throw new SourceError(`${$.message}(${$.code})`);
-  }
-  let document = new Document($.data.content);
-  document = document.querySelector('article') ?? document.querySelector('body');
-  document.querySelector('h1')?.remove();
   return {
     data: {
       finalUrl: response.finalUrl,
-      body: document.outerHtml,
+      body: response.data,
     },
   };
 }
